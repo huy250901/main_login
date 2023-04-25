@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { ISignUpParams } from "../../../models/auth";
 import "../login.css";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ToastContainer, toast } from "react-toastify";
 import { TextField, MenuItem } from "@material-ui/core";
