@@ -1,4 +1,15 @@
 import React, { useRef, useState } from "react";
+// import Avatar from "react-avatar-edit";
+
+import ReactCrop, {
+  centerCrop,
+  makeAspectCrop,
+  Crop,
+  PixelCrop,
+} from "react-image-crop";
+import { canvasPreview } from "./canvasPreview";
+import { useDebounceEffect } from "./useDebounceEffect";
+import "react-image-crop/dist/ReactCrop.css";
 
 import fb from "../../image/fb.png";
 import "./detailpage.css";
@@ -6,6 +17,15 @@ import "./detailpage.css";
 const DetailPage = () => {
   const imgRef = useRef(null);
   const [image, setImage] = useState("");
+  // const [preview, setPreview] = useState("");
+
+  // const onClose = () => {
+  //   setPreview("");
+  // };
+
+  // const onCrop = (view) => {
+  //   setPreview(view);
+  // };
 
   const handleImageClick = () => {
     imgRef.current.click();
@@ -17,14 +37,24 @@ const DetailPage = () => {
     setImage(event.target.files[0]);
   };
 
+  // const centerAspectCrop = (
+  //   mediaWidth: Number,
+  //   mediaHeight: Number,
+  //   aspect: Number
+  // ) => {};
+
   return (
     <div className="container">
       <div className="card">
-        <div
-          style={{}}
-          onClick={handleImageClick}
-          className="profilepic"
-        >
+        {/* <Avatar
+          onCrop={onCrop}
+          onClose={onClose}
+          src={image}
+          width={200}
+          height={200}
+        />
+        {preview && <img src={preview} />} */}
+        <div style={{}} onClick={handleImageClick} className="profilepic">
           {image ? (
             <img
               style={{ height: "100%", width: "100%" }}
@@ -32,11 +62,7 @@ const DetailPage = () => {
               alt=""
             />
           ) : (
-            <img
-              style={{ height: "100%", width: "100%" }}
-              src={fb}
-              alt=""
-            />
+            <img style={{ height: "100%", width: "100%" }} src={fb} alt="" />
           )}
           <input
             ref={imgRef}
@@ -57,9 +83,7 @@ const DetailPage = () => {
           <p className="card-text">1</p>
           <h5 className="card-title">Region</h5>
           <p className="card-text">1</p>
-          <button className="btn btn-primary">
-            Log Out
-          </button>
+          <button className="btn btn-primary">Log Out</button>
         </div>
       </div>
     </div>
