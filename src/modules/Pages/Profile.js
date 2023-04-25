@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
 
 import fb from "../../image/fb.png";
-import "./detailpage.css";
+import "./profile.css";
 
-const DetailPage = () => {
-  const imgRef = useRef(null);
+const Profile = () => {
+  const imgRef = useRef("");
   const [image, setImage] = useState("");
 
   const handleImageClick = () => {
@@ -66,4 +66,4 @@ const DetailPage = () => {
   );
 };
 
-export default DetailPage;
+export default Profile;
