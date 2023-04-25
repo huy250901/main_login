@@ -12,10 +12,10 @@ import { useDebounceEffect } from "./useDebounceEffect";
 import "react-image-crop/dist/ReactCrop.css";
 
 import fb from "../../image/fb.png";
-import "./detailpage.css";
+import "./profile.css";
 
-const DetailPage = () => {
-  const imgRef = useRef(null);
+const Profile = () => {
+  const imgRef = useRef("");
   const [image, setImage] = useState("");
   // const [preview, setPreview] = useState("");
 
@@ -90,4 +90,4 @@ const DetailPage = () => {
   );
 };
 
-export default DetailPage;
+export default Profile;
