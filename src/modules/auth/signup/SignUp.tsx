@@ -6,7 +6,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ToastContainer, toast } from "react-toastify";
-import { TextField, MenuItem } from "@material-ui/core";
+import {
+  TextField,
+  MenuItem,
+  Typography,
+} from "@material-ui/core";
 import Logo from "../../../asset/logo.png";
 const SignUp = () => {
   const {
@@ -80,8 +84,8 @@ const SignUp = () => {
     let error;
     if (!value) {
       error = "Vui lòng nhập mật khẩu";
-    } else if (value.trim().length < 8) {
-      error = "Mật khẩu phải có ít nhất 8 kí tự";
+    } else if (value.trim().length < 6) {
+      error = "Mật khẩu phải có ít nhất 6 kí tự";
     }
     return error;
   };
@@ -116,6 +120,7 @@ const SignUp = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        toast.error("thất bại");
         if (data.code === 200) {
           console.log(data);
           toast.success("Sign Up success");
@@ -151,7 +156,7 @@ const SignUp = () => {
                 className="input-login"
                 {...field}
                 {...register("email")}
-                required={true}
+                // required={true}
               />
             )}
           />
@@ -169,7 +174,7 @@ const SignUp = () => {
             control={control}
             defaultValue=""
             rules={{
-              required: true,
+              // required: true,
               validate: {
                 minLength: (value) =>
                   validatePassword(value),
@@ -181,7 +186,7 @@ const SignUp = () => {
                 type="password"
                 {...field}
                 {...register("password")}
-                required={true}
+                // required={true}
               />
             )}
           />
@@ -199,7 +204,7 @@ const SignUp = () => {
             control={control}
             defaultValue=""
             rules={{
-              required: true,
+              // required: true,
               validate: {
                 minLength: (value) =>
                   validatePassword(value),
@@ -211,7 +216,7 @@ const SignUp = () => {
                 type="password"
                 {...field}
                 {...register("repeatPassword")}
-                required={true}
+                // required={true}
               />
             )}
           />
@@ -227,7 +232,7 @@ const SignUp = () => {
           <Controller
             name="name"
             control={control}
-            rules={{ required: true, validate: {} }}
+            rules={{ validate: {} }}
             render={({ field }) => (
               <input
                 className="input-login"
