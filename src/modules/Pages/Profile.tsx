@@ -9,6 +9,7 @@ import {
   RootState,
   useAppDispatch,
 } from "../../redux/store";
+import { Location, useLocation } from "react-router-dom";
 import ReactCrop from "react-image-crop";
 
 import fb from "../../image/fb.png";
@@ -16,10 +17,12 @@ import "./profile.css";
 import { GetUser } from "../../models/auth";
 import { fetchInforUser } from "../../redux/reducer";
 import { useSelector } from "react-redux";
+import { ROUTES } from "../../configs/routes";
 // import { RootState } from '../../redux/store';
 
 const Profile = () => {
   const [avatarr, setAvatarr] = useState(false);
+  const location = useLocation();
 
   const { user } = useSelector(
     (state: RootState) => state.data.InforUser
