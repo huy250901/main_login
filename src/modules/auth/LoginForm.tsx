@@ -16,19 +16,16 @@ const LoginForm = () => {
   let navigate = useNavigate();
 
   const onSubmit = (data: LoginFormValues) => {
-    fetch(
-      "http://api.training.div3.pgtest.co/api/v1/auth/login",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email: data.username,
-          password: data.password,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch("http://api.training.div3.pgtest.co/api/v1/auth/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: data.username,
+        password: data.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((result) => {
         if (result.code === 200) {
@@ -44,11 +41,7 @@ const LoginForm = () => {
     let error;
     if (!value) {
       error = "Vui lòng nhập email";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-        value
-      )
-    ) {
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
       error = "Email không hợp lệ";
     }
     return error;
@@ -65,10 +58,7 @@ const LoginForm = () => {
   };
 
   return (
-    <form
-      className="form-login"
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <form className="form-login" onSubmit={handleSubmit(onSubmit)}>
       <div style={{ marginTop: "32px" }}>
         <label>{t("email")} </label>
         <Controller
@@ -81,13 +71,11 @@ const LoginForm = () => {
               emailValue: (value) => validateEmail(value),
             },
           }}
-          render={({ field }) => (
-            <input className="input-login" {...field} />
-          )}
+          render={({ field }) => <input className="input-login" {...field} />}
         />
 
         {errors.username && (
-          <small>{errors.username.message}</small>
+          <small className="text-danger">{errors.username.message}</small>
         )}
       </div>
       <div style={{ marginTop: "20px" }}>
@@ -103,17 +91,11 @@ const LoginForm = () => {
             },
           }}
           render={({ field }) => (
-            <input
-              className="input-login"
-              type="password"
-              {...field}
-            />
+            <input className="input-login" type="password" {...field} />
           )}
         />
         {errors.password && (
-          <small className="text-danger">
-            {errors.password.message}
-          </small>
+          <small className="text-danger">{errors.password.message}</small>
         )}
       </div>
       <div className="submit">

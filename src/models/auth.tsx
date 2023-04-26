@@ -30,9 +30,16 @@ export interface ICity {
   name: string;
 }
 
+<<<<<<< HEAD
+interface ImageCropProps {
+  src: string;
+  aspectRatio: number;
+  setCropData: (cropData: string) => void;
+=======
 export interface GetUser {
   id: number;
   name: string;
   email: string;
   error?: null;
+>>>>>>> e4f475addb9a527375ec095478a92594e96bb175
 }
