@@ -99,37 +99,6 @@ const Profile = () => {
             alt=""
           />
         </div>
-        {/* {
-          <img
-            src={`http://api.training.div3.pgtest.co/${avatar}`}
-            alt=""
-          />
-        } */}
-        {/* <div
-          style={{}}
-          onClick={handleImageClick}
-          className="profilepic"
-        >
-          {image ? (
-            <img
-              style={{ height: "100%", width: "100%" }}
-              src={URL.createObjectURL(image)}
-              alt=""
-            />
-          ) : (
-            <img
-              style={{ height: "100%", width: "100%" }}
-              src={fb}
-              alt=""
-            />
-          )}
-          <input
-            ref={imgRef}
-            type="file"
-            onChange={handleImageChange}
-            style={{ display: "none" }}
-          />
-        </div> */}
         <div className="card-body">
           <h5 className="card-title">{name}:NAME</h5>
           <p className="card-text">{email}:EMAIL</p>
