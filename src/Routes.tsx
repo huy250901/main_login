@@ -9,8 +9,15 @@ const Routess = () => {
   return (
     <>
       <Routes>
+        <Route
+          path="/"
+          element={document.cookie.split("=")[1] ? <Home /> : <Login />}
+        />
+        {/* <Route
+          path="/profile"
+          element={document.cookie.split("=")[1] ? <Login /> : <Login />}
+        /> */}
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Login />} />
         <Route path="home" element={<Home />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />

@@ -1,3 +1,4 @@
+import { HTMLAttributes } from "react";
 export interface LoginFormValues {
   username: string;
   password: string;
@@ -35,4 +36,13 @@ export interface GetUser {
   name: string;
   email: string;
   error?: null;
+}
+
+interface MyDivProps extends HTMLAttributes<HTMLDivElement> {
+  show: boolean;
+  onHide: () => void;
+}
+
+export function MyDiv({ children, show, onHide, ...rest }: MyDivProps) {
+  return <div {...rest}>{children}</div>;
 }

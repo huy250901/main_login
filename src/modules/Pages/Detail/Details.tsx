@@ -5,9 +5,7 @@ const Detail = () => {
   const [data, setData] = useState();
 
   useEffect(() => {
-    fetch(
-      "http://api.training.div3.pgtest.co/api/v1/product/"
-    )
+    fetch("http://api.training.div3.pgtest.co/api/v1/product/")
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.log("error", error));

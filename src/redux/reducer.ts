@@ -1,8 +1,6 @@
-import {
-  PayloadAction,
-  createAsyncThunk,
-  createSlice,
-} from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
+import { createAction } from "@reduxjs/toolkit";
 
 export interface IData {
   id: number;
@@ -35,13 +33,20 @@ const initialState: IDatas = {
   InforUser: {},
 };
 
+export const logout = createAction("auth/logout");
+
 export const fetchInforUser = createAsyncThunk(
   "data/fecthInforUser",
-  async (data: string) => {
+  async (data: any) => {
     const response = await fetch(
       "http://api.training.div3.pgtest.co/api/v1/user",
       {
-        headers: { Authorization: data },
+        headers: {
+          Authorization: data,
+          // data.user.token,
+          // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQxOSwiaWF0IjoxNjgyNTgwNjAyfQ.nO-4LrST0bInLbZqYw0ACFYrcH9K9uksZE2dklAeTfI",
+          // data
+        },
       }
     );
     const result = await response.json();
@@ -126,34 +131,44 @@ export const fetchDeleteProduct = createAsyncThunk(
   }
 );
 
+export const fetchLogout = createAsyncThunk(
+  "data/fetchLogout",
+  async (data: any) => {
+    const response = await fetch(
+      `http://api.training.div3.pgtest.co/api/v1/product/${data.id}`,
+      {
+        headers: { Authorization: data },
+      }
+    );
+    const result = await response.json();
+    return result;
+  }
+);
+
 const dataSlice = createSlice({
   name: "data",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(
-        fetchDataAllProduct.fulfilled,
-        (state, action) => {
-          state.Products = action.payload.data;
-        }
-      )
-      .addCase(
-        fetchDataProductById.fulfilled,
-        (state, action) => {
-          state.ProductByID = action.payload.data;
-        }
-      )
-      .addCase(
-        fetchInforUser.fulfilled,
-        (state, action) => {
-          state.InforUser = action.payload.data;
-        }
-      );
+      .addCase(fetchDataAllProduct.fulfilled, (state, action) => {
+        state.Products = action.payload.data;
+      })
+      .addCase(fetchDataProductById.fulfilled, (state, action) => {
+        state.ProductByID = action.payload.data;
+      })
+      .addCase(fetchInforUser.fulfilled, (state, action) => {
+        state.InforUser = action.payload.data;
+      });
+    // .addCase(fetchLogout.fulfilled, (state, action) => {
+    //   state.InforUser.token = "";
+    //   Cookies.remove("token");
+    // });
+    // .addCase(logout, (state, action)) => {
+    //   Cookies.remove("token");
+    // }
   },
 });
-
-export const {} = dataSlice.actions;
 
 const { reducer } = dataSlice;
 

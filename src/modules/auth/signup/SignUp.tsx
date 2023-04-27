@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { ISignUpParams } from "../../../models/auth";
-import "../login.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
 import { ToastContainer, toast } from "react-toastify";
-import {
-  TextField,
-  MenuItem,
-  Typography,
-} from "@material-ui/core";
+import { TextField, MenuItem, Typography } from "@material-ui/core";
+
+import { ISignUpParams } from "../../../models/auth";
+import "../login.css";
+import { useTranslation } from "react-i18next";
 import Logo from "../../../asset/logo.png";
 const SignUp = () => {
   const {
@@ -33,17 +30,11 @@ const SignUp = () => {
   let navigate = useNavigate();
   const { t } = useTranslation();
   const [cityId, setCityId] = React.useState<string>("");
-  const [cityData, setCityData] = React.useState<
-    Array<any>
-  >([]);
-  const [countryData, setCountryData] = React.useState<
-    Array<any>
-  >([]);
+  const [cityData, setCityData] = React.useState<Array<any>>([]);
+  const [countryData, setCountryData] = React.useState<Array<any>>([]);
 
   useEffect(() => {
-    fetch(
-      "http://api.training.div3.pgtest.co/api/v1/location"
-    )
+    fetch("http://api.training.div3.pgtest.co/api/v1/location")
       .then((res) => res.json())
       .then((data) => {
         setCountryData(data.data);
@@ -52,9 +43,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (cityId)
-      fetch(
-        `http://api.training.div3.pgtest.co/api/v1/location?pid=${cityId}`
-      )
+      fetch(`http://api.training.div3.pgtest.co/api/v1/location?pid=${cityId}`)
         .then((res) => res.json())
         .then((data) => {
           setCityData(data.data);
@@ -70,11 +59,7 @@ const SignUp = () => {
     let error;
     if (!value) {
       error = "Vui lòng nhập email";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-        value
-      )
-    ) {
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z.-]+\.[A-Z]{2,}$/i.test(value)) {
       error = "Email không hợp lệ";
     }
     return error;
@@ -84,43 +69,36 @@ const SignUp = () => {
     let error;
     if (!value) {
       error = "Vui lòng nhập mật khẩu";
-    } else if (value.trim().length < 6) {
+    } else if (value.length < 6) {
       error = "Mật khẩu phải có ít nhất 6 kí tự";
+    } else if (/\s/.test(value)) {
+      return "Mật khẩu không được chứa dấu cách";
     }
     return error;
   };
-  // const region = Object.values(locations);
-  //   const options = countryData.map((option, id) => ({
-  //     label: option.name,
-  //     value: option.id,
-  //   }));
-
-  // console.log(options)
 
   const onSubmit = (data: ISignUpParams) => {
-    fetch(
-      "http://api.training.div3.pgtest.co/api/v1/auth/register",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          repeatPassword: data.repeatPassword,
-          name: data.name,
-          gender: data.gender,
-          region: data.region,
-          state: data.state,
-        }),
+    fetch("http://api.training.div3.pgtest.co/api/v1/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+        repeatPassword: data.repeatPassword,
+        name: data.name,
+        gender: data.gender,
+        region: data.region,
+        state: data.state,
+      }),
 
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log(data.error);
         toast.error("thất bại");
+
         if (data.code === 200) {
           console.log(data);
           toast.success("Sign Up success");
@@ -128,16 +106,14 @@ const SignUp = () => {
         }
       });
   };
+
   // const onSubmit: SubmitHandler<ISignUpParams> = data => console.log(data);
 
   return (
     <div className="login">
       <ToastContainer />
       <img className="logo" src={Logo} alt="" />
-      <form
-        className="form-login"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <form className="form-login" onSubmit={handleSubmit(onSubmit)}>
         <div style={{ marginTop: "32px" }}>
           <label>{t("email")}</label>
           <Controller
@@ -145,7 +121,6 @@ const SignUp = () => {
             control={control}
             defaultValue=""
             rules={{
-              required: true,
               validate: {
                 emailValue: (value) => validateEmail(value),
               },
@@ -155,15 +130,14 @@ const SignUp = () => {
                 placeholder="Nhập địa chỉ email"
                 className="input-login"
                 {...field}
-                {...register("email")}
-                // required={true}
+                {...register("email", {
+                  required: "Vui lòng nhập địa chỉ email",
+                })}
               />
             )}
           />
           {errors.email && (
-            <small className="text-danger">
-              {errors.email.message}
-            </small>
+            <small className="text-danger">{errors.email.message}</small>
           )}
         </div>
 
@@ -176,8 +150,7 @@ const SignUp = () => {
             rules={{
               // required: true,
               validate: {
-                minLength: (value) =>
-                  validatePassword(value),
+                minLength: (value) => validatePassword(value),
               },
             }}
             render={({ field }) => (
@@ -191,9 +164,7 @@ const SignUp = () => {
             )}
           />
           {errors.password && (
-            <small className="text-danger">
-              {errors.password.message}
-            </small>
+            <small className="text-danger">{errors.password.message}</small>
           )}
         </div>
 
@@ -206,8 +177,7 @@ const SignUp = () => {
             rules={{
               // required: true,
               validate: {
-                minLength: (value) =>
-                  validatePassword(value),
+                minLength: (value) => validatePassword(value),
               },
             }}
             render={({ field }) => (
@@ -237,12 +207,14 @@ const SignUp = () => {
               <input
                 className="input-login"
                 {...field}
-                {...register("name")}
+                {...register("name", {
+                  required: "Vui lòng nhập họ và tên",
+                })}
               />
             )}
           />
           {errors.name && (
-            <small>{errors.name.message}</small>
+            <small className="text-danger">{errors.name.message}</small>
           )}
         </div>
 
@@ -250,7 +222,14 @@ const SignUp = () => {
           {/* <label>{t("gender")}</label> */}
           <Controller
             name="gender"
-            rules={{ required: true, validate: {} }}
+            rules={{
+              required: "Vui lòng chọn giới tính",
+              validate: {
+                isValidGender: (value) =>
+                  ["male", "female", "other"].includes(value) ||
+                  "Giới tính không hợp lệ",
+              },
+            }}
             control={control}
             render={({ field }) => (
               <TextField
@@ -261,11 +240,11 @@ const SignUp = () => {
                 {...register("gender")}
                 {...field}
               >
+                {errors.gender && (
+                  <small className="text-danger">{errors.gender.message}</small>
+                )}
                 {SelectGender.map((option) => (
-                  <MenuItem
-                    key={option.value}
-                    value={option.value}
-                  >
+                  <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
@@ -287,7 +266,9 @@ const SignUp = () => {
                 style={{ height: "55px", width: "300px" }}
                 {...field}
                 label={t("region")}
-                {...register("region")}
+                {...register("region", {
+                  required: "Vui lòng chọn giới tính",
+                })}
                 value={cityId}
                 onChange={(e) => {
                   setCityId(e.target.value as string);
@@ -326,9 +307,7 @@ const SignUp = () => {
               </TextField>
             )}
           />
-          {errors.state && (
-            <small>{errors.state.message}</small>
-          )}
+          {errors.state && <small>{errors.state.message}</small>}
         </div>
 
         <div className="submit">

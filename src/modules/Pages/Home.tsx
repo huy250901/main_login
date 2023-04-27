@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import Profile from "./Profile";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/profile");
+  };
+
   return (
     <div
       style={{
@@ -9,10 +16,7 @@ const Home = () => {
         justifyContent: "center",
       }}
     >
-      <img
-        src="https://i.pinimg.com/originals/4a/62/80/4a628015a7981a42e4d2e07562f91131.gif"
-        alt=""
-      />
+      <button onClick={handleClick}>Profile</button>
     </div>
   );
 };

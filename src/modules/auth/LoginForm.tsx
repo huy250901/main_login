@@ -1,9 +1,13 @@
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
-import { LoginFormValues } from "../../models/auth";
+import { setCookie } from "nookies";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+import { LoginFormValues } from "../../models/auth";
 import "./login.css";
+import { getTokenSourceMapRange } from "typescript";
+
 const LoginForm = () => {
   const {
     control,
@@ -15,44 +19,87 @@ const LoginForm = () => {
   const { t } = useTranslation();
   let navigate = useNavigate();
 
-  const onSubmit = (data: LoginFormValues) => {
-    fetch("http://api.training.div3.pgtest.co/api/v1/auth/login", {
-      method: "POST",
-      body: JSON.stringify({
-        email: data.username,
-        password: data.password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.code === 200) {
-          toast.success("Đăng nhập thành công!");
-          setTimeout(() => navigate("/home"), 1000);
-        } else {
-          toast.success("Đăng nhập không thành công!");
+  // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQxOSwiaWF0IjoxNjgyNTgwNjAyfQ.nO-4LrST0bInLbZqYw0ACFYrcH9K9uksZE2dklAeTfI"
+
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      const response = await fetch(
+        "http://api.training.div3.pgtest.co/api/v1/auth/login",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            email: data.username,
+            password: data.password,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
+      const result = await response.json();
+      if (result.code === 200) {
+        // Save the token in a cookie
+        setCookie(null, "token", result.data.token, {
+          maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
+          path: "/", // cookie will be accessible for all pages in the domain
+        });
+        toast.success("Đăng nhập thành công!", {
+          autoClose: 2000,
+        });
+        setTimeout(() => {
+          navigate("/profile");
+        }, 3000);
+        console.log(result.data);
+
+        // Redirect to home page
+      } else {
+        toast.error("Đăng nhập thất bại!", {
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  // const validateEmail = (value: string) => {
+  //   let error;
+  //   if (!value) {
+  //     error = "Vui lòng nhập email";
+  //   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+  //     error = "Email không hợp lệ";
+  //   }
+  //   return error;
+  // };
 
   const validateEmail = (value: string) => {
     let error;
     if (!value) {
       error = "Vui lòng nhập email";
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z.-]+\.[A-Z]{2,}$/i.test(value)) {
       error = "Email không hợp lệ";
     }
     return error;
   };
 
+  // const validatePassword = (value: string) => {
+  //   let error;
+  //   if (!value) {
+  //     error = "Vui lòng nhập mật khẩu";
+  //   } else if (value.trim().length < 6) {
+  //     error = "Mật khẩu phải có ít nhất 6 kí tự";
+  //   }
+  //   return error;
+  // };
+
   const validatePassword = (value: string) => {
     let error;
     if (!value) {
       error = "Vui lòng nhập mật khẩu";
-    } else if (value.trim().length < 6) {
+    } else if (value.length < 6) {
       error = "Mật khẩu phải có ít nhất 6 kí tự";
+    } else if (/\s/.test(value)) {
+      return "Mật khẩu không được chứa dấu cách";
     }
     return error;
   };
